@@ -1,32 +1,58 @@
-﻿using Entities;
+﻿using System.Reflection.Metadata;
+using Entities;
 using RepositoryContracts;
 
 namespace InMemoryRepository;
 
 public class UserInMemoryRepository : IUserRepository
 {
+    private List<User> users = new();
     public Task<User> AddAsync(User user)
     {
-        throw new NotImplementedException();
+        user.Id = users.Any()
+            ? users.Max(x => x.Id) + 1
+            : 1;
+        users.Add(user);
+        return Task.FromResult(user);
     }
 
     public Task UpdateAsync(User user)
     {
-        throw new NotImplementedException();
+      User? existingUser = users.FirstOrDefault(x => x.Id == user.Id);
+      if (existingUser == null)
+      {
+          throw new Exception("User not found");
+      }
+      users.Remove(existingUser);
+      users.Add(user);
+      return Task.CompletedTask;
     }
 
     public Task DeleteAsync(int id)
     {
-        throw new NotImplementedException();
+        User? userToRemove = users.SingleOrDefault(u => u.Id == id);
+        if (userToRemove is null)
+        {
+            throw new Exception($"User with ID '{id}' not found");
+        }
+
+        users.Remove(userToRemove);
+        return Task.CompletedTask;
     }
 
     public Task<User> GetSingleAsync(int id)
     {
-        throw new NotImplementedException();
+        User? user = users.SingleOrDefault(u => u.Id == id);
+        if (user is null)
+        {
+            throw new Exception($"User with ID '{id}' not found");
+        }
+        
+        return Task.FromResult(user);
     }
 
     public IQueryable<User> GetMany()
     {
-        throw new NotImplementedException();
+        return users.AsQueryable();
     }
 }
