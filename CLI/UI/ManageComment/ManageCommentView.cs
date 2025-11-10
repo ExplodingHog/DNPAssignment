@@ -32,7 +32,7 @@ public class ManageCommentView
                         listCommentView = new ListCommentView(CommentRepository, this);
                     }
 
-                    await listCommentView.ListComment();
+                    
                     break;
                 case 2:
                     if (createCommentView == null)

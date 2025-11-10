@@ -21,7 +21,7 @@ public class CreateUserView
         string username = Console.ReadLine()!;
         Console.Write("Enter password: ");
         string password = Console.ReadLine()!;
-        await userRepository.AddAsync(new User { username = username, password = password });
+       // await userRepository.AddAsync(new User { username = username, password = password });
         Console.WriteLine($"User created with id {userRepository.GetMany().Last().Id}");
         await manageUsersView.ShowUi();
     }
