@@ -1,0 +1,31 @@
+﻿@page "/Posts/{id:int}"
+@using BlazorApp1.Services
+@using DTO
+@inject IPostService PostService
+
+<h3>Post @post.Id</h3>
+
+@if (post is null)
+{
+    <p>Loading ...</p>
+}
+else
+{
+    <div>
+        <h3>@post.Title</h3>
+        <p>@post.Body</p>
+    </div>
+} 
+
+@code {
+    [Parameter] public int id { get; set; }
+
+    private PostDto? post;
+
+    protected override async Task OnInitializedAsync()
+    {
+        post = await PostService.GetPostByIdAsync(id);
+    }
+  
+
+}

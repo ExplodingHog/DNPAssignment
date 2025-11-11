@@ -1,0 +1,44 @@
+﻿@page "/posts/"
+@using DTO
+@using BlazorApp1.Services
+@inject NavigationManager Nav
+@inject IPostService Postservice
+
+
+<h3>Posts</h3>
+
+
+@if (posts is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <ul>
+        @foreach (var post in posts)
+        {
+            <li>
+                <span>@post.Title @post.Body @post.Id</span>
+                <button class="btn btn-link" @onclick="() => GoToPost(post.Id)"> Go To Post</button>
+                
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private List<PostDto>? posts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        posts = await Postservice.GetPosts();
+    }
+
+    private void GoToPost(int id)
+    {
+        Nav.NavigateTo($"/posts/{id}");
+    }
+
+}
+
+ 
